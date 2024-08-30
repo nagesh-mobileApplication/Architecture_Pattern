@@ -1,44 +1,40 @@
 package com.architecture_pattern.view
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.architecture_pattern.databinding.ActivityCounterBinding
-import com.architecture_pattern.viewmodel.CounterViewModel
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import com.architecture_pattern.model.CounterContract
+import com.architecture_pattern.presenter.CounterPresenter
 
-class CounterActivity : AppCompatActivity() {
+class CounterActivity : AppCompatActivity(), CounterContract.View {
 
-    private val viewModel: CounterViewModel by viewModels()
+    private lateinit var presenter: CounterPresenter
     private val binding by lazy { ActivityCounterBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        presenter = CounterPresenter(this)
+        presenter.onViewReady()
+
         setupUI()
-        observeState()
     }
 
     private fun setupUI() {
         binding.buttonIncrement.setOnClickListener {
-            viewModel.increment()
+            presenter.increment()
         }
         binding.buttonDecrement.setOnClickListener {
-            viewModel.decrement()
+            presenter.decrement()
         }
     }
 
-    private fun observeState() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.state.collectLatest { state ->
-                    binding.textViewCount.text = state.count.toString()
-                }
-            }
-        }
+    override fun showCount(count: Int) {
+        binding.textViewCount.text = count.toString()
+    }
+
+    override fun showError(message: String) {
+        // Handle error messages (e.g., show a Toast or Snackbar)
     }
 }
