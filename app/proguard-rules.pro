@@ -19,3 +19,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+
+# Keep Timber logs in debug builds
+-keep class timber.log.** { *; }
