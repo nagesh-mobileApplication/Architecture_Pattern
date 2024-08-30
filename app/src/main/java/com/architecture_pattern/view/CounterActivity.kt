@@ -8,14 +8,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.architecture_pattern.databinding.ActivityCounterBinding
 import com.architecture_pattern.viewmodel.CounterViewModel
-import com.architecture_pattern.intent.CounterIntent
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class CounterActivity : AppCompatActivity() {
 
     private val viewModel: CounterViewModel by viewModels()
-    private val binding by lazy { ActivityCounterBinding.inflate(layoutInflater)}
+    private val binding by lazy { ActivityCounterBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,10 +25,10 @@ class CounterActivity : AppCompatActivity() {
 
     private fun setupUI() {
         binding.buttonIncrement.setOnClickListener {
-            viewModel.handleIntent(CounterIntent.Increment)
+            viewModel.increment()
         }
         binding.buttonDecrement.setOnClickListener {
-            viewModel.handleIntent(CounterIntent.Decrement)
+            viewModel.decrement()
         }
     }
 
